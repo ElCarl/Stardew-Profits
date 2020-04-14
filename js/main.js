@@ -130,7 +130,6 @@ function harvests(cropID) {
  * @return The total profit.
  */
 function profit(crop) {
-	var total_harvests = crop.harvests * options.planted;  // options.planted should be adjusted if going on price basis
 	var season = seasons[options.season];
 	var fertilizer = fertilizers[options.fertilizer];
 	var seeds = options.seeds;
@@ -141,6 +140,21 @@ function profit(crop) {
 	var ratioG = ratios[fertilizer.ratio][options.level].ratioG;
 
 	var profit = 0;
+    
+    if (options.moneyLimited) {
+        if (crop.seeds.pierre != 0 && options.seeds.pierre)
+            var seed_cost = crop.seeds.pierre;
+        if (crop.seeds.joja != 0 && options.seeds.joja)
+            if (!seed_cost || crop.seeds.joja <= seed_cost)
+                var seed_cost = crop.seeds.joja;
+        if (crop.seeds.special != 0 && options.seeds.special)
+            if (!seed_cost || crop.seeds.special <= seed_cost)
+                var seed_cost = crop.seeds.special;
+        var num_planted = Math.floor(options.money / seed_cost);
+    } else {
+        var num_planted = options.planted;
+    }
+    var total_harvests = crop.harvests * num_planted;  // options.planted should be adjusted if going on price basis
 
 	if (produce == 0) {
 		profit += crop.produce.rawN * ratioN * total_harvests;
@@ -920,6 +934,14 @@ function updateData() {
 
 	if (document.getElementById('number_planted').value <= 0)
 		document.getElementById('number_planted').value = 1;
+    
+    options.moneyLimited = document.getElementById('check_moneyLimited').checked
+    
+    if (document.getElementById('money_to_spend').value < 0)
+        document.getElementById('money_to_spend').value = 0;
+
+    options.money = document.getElementById('money_to_spend').value;
+    
 	options.planted = document.getElementById('number_planted').value;
 
 	options.average = document.getElementById('check_average').checked;
