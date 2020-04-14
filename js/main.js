@@ -130,7 +130,7 @@ function harvests(cropID) {
  * @return The total profit.
  */
 function profit(crop) {
-	var total_harvests = crop.harvests * options.planted;
+	var total_harvests = crop.harvests * options.planted;  // options.planted should be adjusted if going on price basis
 	var season = seasons[options.season];
 	var fertilizer = fertilizers[options.fertilizer];
 	var seeds = options.seeds;

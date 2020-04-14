@@ -2,6 +2,8 @@
 var options = {
 	"produce" : 0,
 	"planted": 1,
+	"money": 1000,
+	"moneyLimited": false,
 	"days": 28,
 	"fertilizer": 2,
 	"level": 0,
